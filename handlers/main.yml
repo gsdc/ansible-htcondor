@@ -1,6 +1,6 @@
 ---
 # handlers file for roles/ansible-htcondor
 - name: restart condor
-  service: 
+  service:
     name: condor
     state: restarted

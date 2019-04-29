@@ -7,13 +7,13 @@
     url: https://research.cs.wisc.edu/htcondor/yum/repo.d/htcondor-stable-rhel7.repo
     dest: /etc/yum.repos.d/htcondor-stable-rhel7.repo
 - name: Install signed key
-  rpm_key: 
+  rpm_key:
     key: https://research.cs.wisc.edu/htcondor/yum/RPM-GPG-KEY-HTCondor
     state: present
 - name: Install htcondor package.
   yum:
     name: condor
-    state: latest
+    state: present
 - name: 01-cluster.conf for htcondor
   template:
     src: 01-cluster.conf.j2
@@ -25,10 +25,7 @@
     dest: /etc/condor/config.d/02-local.conf
   notify: restart condor
 - name: Starting the condor service.
-  service: 
+  service:
     name: condor
     state: started
     enabled: true
-
-
-  
