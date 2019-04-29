@@ -1,0 +1,34 @@
+---
+# tasks file for roles/ansible-htcondor
+#https://research.cs.wisc.edu/htcondor/instructions/el/7/stable
+#
+- name: Download htconodr repository
+  get_url:
+    url: https://research.cs.wisc.edu/htcondor/yum/repo.d/htcondor-stable-rhel7.repo
+    dest: /etc/yum.repos.d/htcondor-stable-rhel7.repo
+- name: Install signed key
+  rpm_key: 
+    key: https://research.cs.wisc.edu/htcondor/yum/RPM-GPG-KEY-HTCondor
+    state: present
+- name: Install htcondor package.
+  yum:
+    name: condor
+    state: latest
+- name: 01-cluster.conf for htcondor
+  template:
+    src: 01-cluster.conf.j2
+    dest: /etc/condor/config.d/01-cluster.conf
+  notify: restart condor
+- name: 02-local.conf for htcondor
+  template:
+    src: 02-local.conf.j2
+    dest: /etc/condor/config.d/02-local.conf
+  notify: restart condor
+- name: Starting the condor service.
+  service: 
+    name: condor
+    state: started
+    enabled: true
+
+
+  

@@ -1,0 +1,17 @@
+---
+# defaults file for roles/ansible-htcondor
+condor_version: "8.8"
+condor_admin: ""         #condor_admin@email.com
+condor_daemon_list: ""   # "MASTER,SCHEDD,STARTD,GANGLIAD"
+condor_domain: "{{ ansible_domain }}"
+condor_host: ""
+condor_name: ""
+condor_pool_username: ""
+enable_dynamicslot: False
+enable_singularity: False
+use_singularity_image_on_cvmfs: False
+singularity_image_path: ""
+firewall_lowport: 9000
+firewall_highport: 9999
+firewall_whitelist: []
+extra: ""
