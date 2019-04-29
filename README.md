@@ -1,4 +1,4 @@
-ansible-htconodr
+ansible-htcondor
 =========
 
 This role is designed to help you install and configure the HTCondor Job Manager.
