@@ -47,7 +47,7 @@ Below is a small modification to the settings we actually use. Please make the c
 
     - hosts: servers
       roles:
-      - role: ansible-htcondor 
+      - role: geonmo.ansible_htcondor 
         condor_admin: "admin@localhost.lo"
         condor_daemon_list: "MASTER, STARTD"
         condor_domain: "localhost.lo"
