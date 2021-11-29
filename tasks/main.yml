@@ -2,18 +2,35 @@
 # tasks file for roles/ansible-htcondor
 #https://research.cs.wisc.edu/htcondor/instructions/el/7/stable
 #
-- name: Download htconodr repository
-  get_url:
-    url: https://research.cs.wisc.edu/htcondor/yum/repo.d/htcondor-stable-rhel7.repo
-    dest: /etc/yum.repos.d/htcondor-stable-rhel7.repo
 - name: Install signed key
   rpm_key:
     key: https://research.cs.wisc.edu/htcondor/yum/RPM-GPG-KEY-HTCondor
+    state: present
+- name: Download htconodr repository
+  yum:
+    name: "https://research.cs.wisc.edu/htcondor/repo/{{ condor_version }}/htcondor-release-current.el7.noarch.rpm"
     state: present
 - name: Install htcondor package.
   yum:
     name: condor
     state: present
+- name: Check Pool password file
+  stat:
+    path: /etc/condor/passwords.d/POOL
+  register: stat_result
+
+- name: Create Pool Password
+  command: condor_store_cred -f /etc/condor/passwords.d/POOL 
+  args:
+    stdin: "{{ condor_pool_password }}"
+  when: not stat_result.stat.exists
+  notify: restart condor
+- name: Check password file's owner and group
+  file: 
+    path: /etc/condor/passwords.d/POOL
+    owner: root
+    group: root
+  notify: restart condor
 - name: 01-cluster.conf for htcondor
   template:
     src: 01-cluster.conf.j2
