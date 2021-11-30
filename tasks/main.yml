@@ -14,23 +14,6 @@
   yum:
     name: condor
     state: present
-- name: Check Pool password file
-  stat:
-    path: /etc/condor/passwords.d/POOL
-  register: stat_result
-
-- name: Create Pool Password
-  command: condor_store_cred -f /etc/condor/passwords.d/POOL 
-  args:
-    stdin: "{{ condor_pool_password }}"
-  when: not stat_result.stat.exists
-  notify: restart condor
-- name: Check password file's owner and group
-  file: 
-    path: /etc/condor/passwords.d/POOL
-    owner: root
-    group: root
-  notify: restart condor
 - name: 01-cluster.conf for htcondor
   template:
     src: 01-cluster.conf.j2
@@ -46,3 +29,19 @@
     name: condor
     state: started
     enabled: true
+- name: Check Pool password file
+  stat:
+    path: "{{ condor_pool_password_file_path }}"
+  register: stat_result
+- name: Create Pool Password
+  command: "condor_store_cred -f {{ condor_pool_password_file_path }}"
+  args:
+    stdin: "{{ condor_pool_password }}"
+  when: not stat_result.stat.exists
+  notify: restart condor
+- name: Check password file's owner and group
+  file: 
+    path: "{{ condor_pool_password_file_path }}"
+    owner: root
+    group: root
+  notify: restart condor

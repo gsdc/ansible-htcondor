@@ -7,6 +7,7 @@ condor_domain: "{{ ansible_domain }}"
 condor_host: ""
 condor_name: ""
 condor_pool_username: ""
+condor_pool_password_file_path: "/etc/condor/passwords.d/condor_password"
 condor_pool_password: "hello world"
 enable_dynamicslot: False
 enable_singularity: False

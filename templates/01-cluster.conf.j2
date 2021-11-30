@@ -1,18 +1,15 @@
 UID_DOMAIN = {{ condor_domain | mandatory }}
 COLLECTOR_NAME = {{ condor_name }}
 FILESYSTEM_DOMAIN = {{ condor_domain }}
-ALLOW_WRITE = *.{{ condor_domain }}
-ALLOW_READ = *.{{ condor_domain }}
 CONDOR_ADMIN = {{ condor_admin }}
 CONDOR_HOST = {{ condor_host | mandatory }}
 IN_HIGHPORT = {{ firewall_highport }}
 IN_LOWPORT = {{ firewall_lowport }}
 TRUST_UID_DOMAIN = TRUE
 
-SEC_DAEMON_AUTHENTICATION = REQUIRED
-SEC_DAEMON_AUTHENTICATION_METHODS = PASSWORD
+SEC_PASSWORD_FILE= {{ condor_pool_password_file_path }}
+SEC_TOKEN_POOL_SIGNING_KEY_FILE= $(SEC_PASSWORD_DIRECTORY)/POOL
 
-SEC_CLIENT_AUTHENTICATION_METHODS = FS, PASSWORD, IDTOKENS
 
 {% if enable_dynamicslot %}
 NUM_SLOTS = 1
