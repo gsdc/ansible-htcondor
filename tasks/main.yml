@@ -13,7 +13,8 @@
     disable_gpg_check: yes
   when: ansible_facts['distribution_file_variety'] == "RedHat"
 - name: Enable powertools repo for CentOS8 variation.
-    shell: "dnf config-manager --set-enabled powertools"
+  shell: 
+    cmd: dnf config-manager --set-enabled powertools
   when: 
     - ansible_facts['distribution_file_variety'] == "RedHat"
     - ansible_facts['distribution_major_version'] == "8"
