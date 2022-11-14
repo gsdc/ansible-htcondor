@@ -18,6 +18,15 @@ SLOT_TYPE_1 = 100%
 SLOT_TYPE_1_PARTITIONABLE = TRUE
 {% endif %}
 
+{% if ((enable_singularity) and (condor_version =="9.0")): %}
+SINGULARITY_JOB = !isUndefined(TARGET.SingularityImage)
+SINGULARITY_IMAGE_EXPR = TARGET.SingularityImage
+SINGULARITY_TARGET_DIR = /srv
+MOUNT_UNDER_SCRATCH = /tmp, /var/tmp
+SINGULARITY_BIND_EXPR=ifThenElse( isUndefined(TARGET.SingularityBind),"/home",TARGET.SingularityBind)
+SINGULARITY_EXTRA_ARGUMENTS=ifThenElse( isUndefined(TARGET.SingularityExtraArgs),"",TARGET.SingularityExtraArgs)
+{% endif %}
+
 {% if extra != '' %}
 {{ extra }}
 {% endif %}
