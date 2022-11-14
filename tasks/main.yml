@@ -2,55 +2,5 @@
 # tasks file for roles/ansible-htcondor
 #https://research.cs.wisc.edu/htcondor/instructions/el/7/stable
 #
-- name: Install signed key
-  rpm_key:
-    key: https://research.cs.wisc.edu/htcondor/yum/RPM-GPG-KEY-HTCondor
-    state: present
-- name: Download htconodr repository
-  yum:
-    name: "https://research.cs.wisc.edu/htcondor/repo/{{ condor_version }}/htcondor-release-current.el{{ ansible_facts['distribution_major_version'] }}.noarch.rpm"
-    state: present
-    disable_gpg_check: yes
-  when: ansible_facts['distribution_file_variety'] == "RedHat"
-- name: Enable powertools repo for CentOS8 variation.
-  shell: 
-    cmd: dnf config-manager --set-enabled powertools
-  when: 
-    - ansible_facts['distribution_file_variety'] == "RedHat"
-    - ansible_facts['distribution_major_version'] == "8"
-- name: Install htcondor package.
-  yum:
-    name: condor
-    state: present
-- name: 01-cluster.conf for htcondor
-  template:
-    src: 01-cluster.conf.j2
-    dest: /etc/condor/config.d/01-cluster.conf
-  notify: restart condor
-- name: 02-local.conf for htcondor
-  template:
-    src: 02-local.conf.j2
-    dest: /etc/condor/config.d/02-local.conf
-  notify: restart condor
-- name: Check Pool password file
-  stat:
-    path: "{{ condor_pool_password_file_path }}"
-  register: stat_result
-- name: Create Pool Password
-  command: "condor_store_cred -f {{ condor_pool_password_file_path }}"
-  args:
-    stdin: "{{ condor_pool_password }}"
-  when: not stat_result.stat.exists
-- name: Check password file's owner and group
-  file: 
-    path: "{{ condor_pool_password_file_path }}"
-    owner: root
-    group: root
-- name: Create IDToken file
-    command: "condor_token_create -identity condor@{{ condor_host }} > /etc/condor/tokens.d/condor@{{ condor_host }}"
-    notify: restart condor
-- name: Starting the condor service.
-  service:
-    name: condor
-    state: started
-    enabled: true
+- name: Exeucte HTCondor step
+  include_tasks: "{{ step }}.yml" 
