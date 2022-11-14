@@ -32,11 +32,6 @@
     src: 02-local.conf.j2
     dest: /etc/condor/config.d/02-local.conf
   notify: restart condor
-- name: Starting the condor service.
-  service:
-    name: condor
-    state: started
-    enabled: true
 - name: Check Pool password file
   stat:
     path: "{{ condor_pool_password_file_path }}"
@@ -46,10 +41,16 @@
   args:
     stdin: "{{ condor_pool_password }}"
   when: not stat_result.stat.exists
-  notify: restart condor
 - name: Check password file's owner and group
   file: 
     path: "{{ condor_pool_password_file_path }}"
     owner: root
     group: root
-  notify: restart condor
+- name: Create IDToken file
+    command: "condor_token_create -identity condor@{{ condor_host }} > /etc/condor/tokens.d/condor@{{ condor_host }}"
+    notify: restart condor
+- name: Starting the condor service.
+  service:
+    name: condor
+    state: started
+    enabled: true
