@@ -1,5 +1,5 @@
 ---
-- name: Install and Configure HTCondor Package
-  include_tasks: 
-    - "install.yml"
-    - "config.yml"
+- name: Install HTCondor Package
+  include_tasks:  "install.yml"
+- name: Configure HTCondor 
+  include_tasks:  "config.yml"
