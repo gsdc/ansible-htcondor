@@ -16,5 +16,5 @@ singularity_image_path: ""
 firewall_lowport: 9000
 firewall_highport: 9999
 firewall_whitelist: []
-step: "install"
+step: "default"
 extra: ""
