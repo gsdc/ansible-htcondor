@@ -18,7 +18,7 @@
   when: 
     - ansible_facts['distribution_file_variety'] == "RedHat"
     - ansible_facts['distribution_major_version'] == "8"
-    - (ansible_distribution == "AlmaLinux") or (ansible_distribution == "RockyLinux") or (ansible_distribution == "CentOS")
+    - (ansible_distribution == "AlmaLinux") or (ansible_distribution == "Rocky") or (ansible_distribution == "CentOS")
 - name: Install htcondor package.
   yum:
     name: condor
