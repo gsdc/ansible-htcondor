@@ -20,15 +20,13 @@
   command: "condor_store_cred -f {{ condor_pool_password_file_path }}"
   args:
     stdin: "{{ condor_pool_password }}"
+  notify: generate daemon idtoken
   when: not stat_result.stat.exists
 - name: Check password file's owner and group
   file: 
     path: "{{ condor_pool_password_file_path }}"
     owner: root
     group: root
-- name: Create IDToken file
-  command: "condor_token_create -identity condor@{{ condor_host }} -token /etc/condor/tokens.d/condor@{{ condor_host }}"
-  notify: restart condor
 - name: Starting the condor service.
   service:
     name: condor
