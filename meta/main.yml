@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: htcondor
   author: Geonmo Ryu
   description: Supports installation and basic setup of the HTCondor Job Manager program developed by the University of Wisconsin.
   company: Korea Institute of Science and Technology Information(KISTI)
