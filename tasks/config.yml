@@ -1,7 +1,4 @@
 ---
-# tasks file for roles/ansible-htcondor
-#https://research.cs.wisc.edu/htcondor/instructions/el/7/stable
-#
 - name: 01-cluster.conf for htcondor
   template:
     src: 01-cluster.conf.j2
