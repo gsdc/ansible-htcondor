@@ -24,6 +24,12 @@
     path: "{{ condor_pool_password_file_path }}"
     owner: root
     group: root
+- name: Create Daemon Token
+  shell: 
+    cmd: "condor_token_create -identity condor@{{ condor_host }} > /etc/condor/tokens.d/condor@{{ condor_host }}"
+- file: 
+    path: "/etc/condor/tokens.d/condor@{{ condor_host }}"
+    mode: 0600
 - name: Starting the condor service.
   service:
     name: condor
