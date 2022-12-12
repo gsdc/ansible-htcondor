@@ -1,7 +1,4 @@
 ---
-# tasks file for roles/ansible-htcondor
-#https://research.cs.wisc.edu/htcondor/instructions/el/7/stable
-#
 - name: Install signed key
   rpm_key:
     key: https://research.cs.wisc.edu/htcondor/yum/RPM-GPG-KEY-HTCondor
@@ -10,12 +7,11 @@
   yum:
     name: "https://research.cs.wisc.edu/htcondor/repo/{{ condor_version }}/htcondor-release-current.el{{ ansible_facts['distribution_major_version'] }}.noarch.rpm"
     state: present
-    disable_gpg_check: yes
+    disable_gpg_check: true
   when: ansible_facts['distribution_file_variety'] == "RedHat"
 - name: Enable powertools repo for CentOS8 variation.
-  shell: 
-    cmd: dnf config-manager --set-enabled powertools
-  when: 
+  command: dnf config-manager --set-enabled powertools
+  when:
     - ansible_facts['distribution_file_variety'] == "RedHat"
     - ansible_facts['distribution_major_version'] == "8"
     - (ansible_distribution == "AlmaLinux") or (ansible_distribution == "Rocky") or (ansible_distribution == "CentOS")

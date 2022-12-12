@@ -1,7 +1,4 @@
 ---
-# tasks file for roles/ansible-htcondor
-#https://research.cs.wisc.edu/htcondor/instructions/el/7/stable
-#
 - name: 01-cluster.conf for htcondor
   template:
     src: 01-cluster.conf.j2
@@ -23,7 +20,7 @@
   notify: generate daemon idtoken
   when: not stat_result.stat.exists
 - name: Check password file's owner and group
-  file: 
+  file:
     path: "{{ condor_pool_password_file_path }}"
     owner: root
     group: root
