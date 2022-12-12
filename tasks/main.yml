@@ -3,4 +3,4 @@
 # https://research.cs.wisc.edu/htcondor/instructions/el/7/stable
 #
 - name: Exeucte HTCondor step
-  include_tasks: "{{ step }}.yml" 
+  include_tasks: "{{ step }}.yml"
