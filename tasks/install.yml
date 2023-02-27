@@ -1,4 +1,15 @@
 ---
+- name: OS Check
+  assert: 
+    that:
+      - "ansible_os_family == 'RedHat'"
+    fail_msg: "OS must be Redhat variation"
+- name: HTCondor Version
+  assert:
+    that:
+      - (condor_version == "10.x")
+    fail_msg: "condor_version must be 10.x on Redhat 9 various"
+  when: ansible_distribution_major_version == "9"
 - name: Install signed key
   rpm_key:
     key: "https://research.cs.wisc.edu/htcondor/repo/keys/HTCondor-{{ condor_version }}-Key"
@@ -7,7 +18,9 @@
   dnf:
     name: "https://research.cs.wisc.edu/htcondor/repo/{{ condor_version }}/htcondor-release-current.el{{ ansible_facts['distribution_major_version'] }}.noarch.rpm"
     state: present
-  when: ansible_facts['distribution_file_variety'] == "RedHat"
+  when: 
+    - ansible_facts['distribution_file_variety'] == "RedHat"
+    - ansible_facts['distribution_major_version'] < 9 || condor_version == "10.x"
 - name: Enable powertools repo for CentOS8 variation.
   command: dnf config-manager --set-enabled powertools
   when:
