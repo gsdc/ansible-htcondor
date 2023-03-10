@@ -18,7 +18,7 @@ SLOT_TYPE_1 = 100%
 SLOT_TYPE_1_PARTITIONABLE = TRUE
 {% endif %}
 
-{% if ((enable_singularity) and (condor_version =="9.0")): %}
+{% if ((enable_singularity) or (enable_apptainer)): %}
 SINGULARITY_JOB = !isUndefined(TARGET.SingularityImage)
 SINGULARITY_IMAGE_EXPR = TARGET.SingularityImage
 SINGULARITY_TARGET_DIR = /srv
