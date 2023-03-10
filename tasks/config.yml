@@ -1,14 +1,4 @@
 ---
-- name: 01-cluster.conf for htcondor
-  template:
-    src: 01-cluster.conf.j2
-    dest: /etc/condor/config.d/01-cluster.conf
-  notify: restart condor
-- name: 02-local.conf for htcondor
-  template:
-    src: 02-local.conf.j2
-    dest: /etc/condor/config.d/02-local.conf
-  notify: restart condor
 - name: Check Pool password file
   stat:
     path: "{{ condor_pool_password_file_path }}"
@@ -30,6 +20,16 @@
 - file: 
     path: "/etc/condor/tokens.d/condor@{{ condor_host }}"
     mode: 0600
+- name: 01-cluster.conf for htcondor
+  template:
+    src: 01-cluster.conf.j2
+    dest: /etc/condor/config.d/01-cluster.conf
+  notify: restart condor
+- name: 02-local.conf for htcondor
+  template:
+    src: 02-local.conf.j2
+    dest: /etc/condor/config.d/02-local.conf
+  notify: restart condor
 - name: Starting the condor service.
   service:
     name: condor
