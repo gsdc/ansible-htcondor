@@ -15,10 +15,10 @@
     key: "https://research.cs.wisc.edu/htcondor/repo/keys/HTCondor-{{ condor_version }}-Key"
     state: present
 - name: Download htcondor repository
-  dnf:
+  yum:
     name: "https://research.cs.wisc.edu/htcondor/repo/{{ condor_version }}/htcondor-release-current.el{{ ansible_distribution_major_version }}.noarch.rpm"
     state: present
-  when: 
+  when: install_condor_repo 
 - name: Enable powertools repo for CentOS8 variation.
   command: dnf config-manager --set-enabled powertools
   when:
