@@ -4,12 +4,6 @@
     that:
       - "ansible_os_family == 'RedHat'"
     fail_msg: "OS must be Redhat variation"
-- name: HTCondor Version
-  assert:
-    that:
-      - (condor_version == "10.x")
-    fail_msg: "condor_version must be 10.x on Redhat 9 various"
-  when: ansible_distribution_major_version == "9"
 - name: Install signed key
   rpm_key:
     key: "https://research.cs.wisc.edu/htcondor/repo/keys/HTCondor-{{ condor_version }}-Key"
@@ -23,6 +17,11 @@
   command: dnf config-manager --set-enabled powertools
   when:
     - ansible_distribution_major_version == "8"
+    - (ansible_distribution == "AlmaLinux") or (ansible_distribution == "Rocky") or (ansible_distribution == "CentOS")
+- name: Enable CRB repo for RHEL9 variation.
+  command: dnf config-manager --set-enabled crb
+  when:
+    - ansible_distribution_major_version == "9"
     - (ansible_distribution == "AlmaLinux") or (ansible_distribution == "Rocky") or (ansible_distribution == "CentOS")
 - name: Install htcondor package.
   yum:

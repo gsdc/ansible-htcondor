@@ -1,6 +1,6 @@
 ---
 # defaults file for roles/ansible-htcondor
-condor_version: "9.0"
+condor_version: "23.0"
 condor_admin: ""         # condor_admin@email.com
 condor_daemon_list: ""   # "MASTER,SCHEDD,STARTD,GANGLIAD"
 condor_domain: "{{ ansible_domain }}"
