@@ -3,20 +3,35 @@
   stat:
     path: "{{ condor_pool_password_file_path }}"
   register: stat_result
+- name: Create Dummy Pool Password for compare
+  command: "condor_store_cred -f {{ condor_pool_password_file_path }}.dummy"
+  args:
+    stdin: "{{ condor_pool_password }}"
+  when: stat_result.stat.exists
+- name: Compare dummy and pool password file
+  command: "/bin/diff {{ condor_pool_password_file_path }} {{ condor_pool_password_file_path }}.dummy"
+  register: condor_pool_changed
+  failed_when: condor_pool_changed.rc > 1
 - name: Create Pool Password
   command: "condor_store_cred -f {{ condor_pool_password_file_path }}"
   args:
     stdin: "{{ condor_pool_password }}"
-  notify: generate daemon idtoken
-  when: not stat_result.stat.exists
+  notify: regenerate daemon idtoken
+  when: 
+    - not stat_result.stat.exists or condor_pool_changed.rc != 0
 - name: Check password file's owner and group
   file:
     path: "{{ condor_pool_password_file_path }}"
     owner: root
     group: root
-- name: Create Daemon Token
+- name: Check Daemon Token is existed,
+  stat:
+    path: "/etc/condor/tokens.d/condor@{{ condor_host }}"
+  register: idtoken_result
+- name: Create Daemon Token if the token is not existed.
   shell: 
     cmd: "condor_token_create -identity condor@{{ condor_host }} > /etc/condor/tokens.d/condor@{{ condor_host }}"
+  when: not idtoken_result.stat.exists
 - file: 
     path: "/etc/condor/tokens.d/condor@{{ condor_host }}"
     mode: 0600
