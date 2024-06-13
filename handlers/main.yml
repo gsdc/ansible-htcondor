@@ -4,6 +4,6 @@
   service:
     name: condor
     state: restarted
-- name: generate daemon idtoken
+- name: regenerate daemon idtoken
   command: "condor_token_create -identity condor@{{ condor_host }} -token /etc/condor/tokens.d/condor@{{ condor_host }}"
-  notify: generate daemon idtoken
+  notify: restart condor
