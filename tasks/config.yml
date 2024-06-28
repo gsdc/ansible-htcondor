@@ -12,6 +12,7 @@
   command: "/bin/diff {{ condor_pool_password_file_path }} {{ condor_pool_password_file_path }}.dummy"
   register: condor_pool_changed
   failed_when: condor_pool_changed.rc > 1
+  when: stat_result.stat.exists
 - name: Create Pool Password
   command: "condor_store_cred -f {{ condor_pool_password_file_path }}"
   args:
@@ -39,11 +40,17 @@
   template:
     src: 01-cluster.conf.j2
     dest: /etc/condor/config.d/01-cluster.conf
+    user: condor
+    group: condor
+    mode: 644
   notify: restart condor
 - name: 02-local.conf for htcondor
   template:
     src: 02-local.conf.j2
     dest: /etc/condor/config.d/02-local.conf
+    user: condor
+    group: condor
+    mode: 644
   notify: restart condor
 - name: Starting the condor service.
   service:
