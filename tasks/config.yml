@@ -35,14 +35,14 @@
   when: not idtoken_result.stat.exists
 - file: 
     path: "/etc/condor/tokens.d/condor@{{ condor_host }}"
-    mode: 0600
+    mode: "0600"
 - name: 01-cluster.conf for htcondor
   template:
     src: 01-cluster.conf.j2
     dest: /etc/condor/config.d/01-cluster.conf
     user: condor
     group: condor
-    mode: 644
+    mode: "0644"
   notify: restart condor
 - name: 02-local.conf for htcondor
   template:
@@ -50,7 +50,7 @@
     dest: /etc/condor/config.d/02-local.conf
     user: condor
     group: condor
-    mode: 644
+    mode: "0644"
   notify: restart condor
 - name: Starting the condor service.
   service:
