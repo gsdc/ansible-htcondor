@@ -33,14 +33,15 @@
   shell: 
     cmd: "condor_token_create -identity condor@{{ condor_host }} > /etc/condor/tokens.d/condor@{{ condor_host }}"
   when: not idtoken_result.stat.exists
-- file: 
+- name: Change permission for daemon token
+  file: 
     path: "/etc/condor/tokens.d/condor@{{ condor_host }}"
     mode: "0600"
 - name: 01-cluster.conf for htcondor
   template:
     src: 01-cluster.conf.j2
     dest: /etc/condor/config.d/01-cluster.conf
-    user: condor
+    owner: condor
     group: condor
     mode: "0644"
   notify: restart condor
@@ -48,7 +49,7 @@
   template:
     src: 02-local.conf.j2
     dest: /etc/condor/config.d/02-local.conf
-    user: condor
+    owner: condor
     group: condor
     mode: "0644"
   notify: restart condor
