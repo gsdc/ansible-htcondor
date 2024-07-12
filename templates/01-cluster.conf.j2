@@ -2,7 +2,14 @@ UID_DOMAIN = {{ condor_domain | mandatory }}
 COLLECTOR_NAME = {{ condor_name }}
 FILESYSTEM_DOMAIN = {{ condor_domain }}
 CONDOR_ADMIN = {{ condor_admin }}
+
+{% if condor_host is string -%}
 CONDOR_HOST = {{ condor_host | mandatory }}
+{% elif condor_host|length == 1 -%}
+CONDOR_HOST = {{ condor_host[0] | mandatory }}
+{% elif condor_host|length >1 -%}
+CONDOR_HOST = {{ condor_host|join(', ') }} 
+{% endif -%}
 IN_HIGHPORT = {{ firewall_highport }}
 IN_LOWPORT = {{ firewall_lowport }}
 TRUST_UID_DOMAIN = TRUE
