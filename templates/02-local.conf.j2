@@ -6,19 +6,17 @@ use security:get_htcondor_idtokens
 # UID_DOMAIN is set (and introduces more opportunities for DNS to fail).
 ALLOW_WRITE = $(ALLOW_WRITE) *
 SCHEDD_NAME = {{ ansible_host }}
+QUEUE_SUPER_USERS = root condor condor_pool
 {% endif %}
 
-SEC_DEFAULT_AUTHENTICATION_METHODS = PASSWORD, IDTOKENS, FS
-SEC_CLIENT_AUTHENTICATION_METHODS = PASSWORD, IDTOKENS, FS
+SEC_DEFAULT_AUTHENTICATION_METHODS = IDTOKENS, PASSWORD, FS
+SEC_CLIENT_AUTHENTICATION_METHODS  = IDTOKENS, PASSWORD, FS
 
-ALLOW_ADMINISTRATOR = $(ALLOW_ADMINISTRATOR) condor_pool@* condor@{{ ansible_domain }}
-ALLOW_DAEMON = $(ALLOW_DAEMON) condor_pool@* condor@{{ ansible_domain }}
-ALLOW_NEGOTIATOR = $(ALLOW_NEGOTIATOR) condor_pool@* condor@{{ ansible_domain }}
-
-
+ALLOW_ADMINISTRATOR = $(ALLOW_ADMINISTRATOR) condor_pool@$(TRUST_DOMAIN) condor@$(TRUST_DOMAIN)
+ALLOW_DAEMON = $(ALLOW_DAEMON) condor_pool@$(TRUST_DOMAIN) condor@$(TRUST_DOMAIN)
+ALLOW_NEGOTIATOR = $(ALLOW_NEGOTIATOR) condor_pool@$(TRUST_DOMAIN) condor@$(TRUST_DOMAIN)
 
 DAEMON_LIST = {{ condor_daemon_list }}
-
 
 {% if condor_host is not string and condor_host|length >1 and "COLLECTOR" in condor_daemon_list -%}
 TRUST_DOMAIN = {{ ansible_domain }}
