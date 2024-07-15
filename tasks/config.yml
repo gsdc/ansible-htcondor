@@ -27,15 +27,15 @@
     group: root
 - name: Check Daemon Token is existed,
   stat:
-    path: "/etc/condor/tokens.d/condor@{{ condor_host }}"
+    path: "/etc/condor/tokens.d/condor@{{ ansible_domain }}"
   register: idtoken_result
 - name: Create Daemon Token if the token is not existed.
   shell: 
-    cmd: "condor_token_create -identity condor@{{ condor_host }} > /etc/condor/tokens.d/condor@{{ condor_host }}"
+    cmd: "condor_token_create -identity condor@{{ ansible_domain }} > /etc/condor/tokens.d/condor@{{ ansible_domain }}"
   when: not idtoken_result.stat.exists
 - name: Change permission for daemon token
   file: 
-    path: "/etc/condor/tokens.d/condor@{{ condor_host }}"
+    path: "/etc/condor/tokens.d/condor@{{ ansible_domain }}"
     mode: "0600"
 - name: 01-cluster.conf for htcondor
   template:

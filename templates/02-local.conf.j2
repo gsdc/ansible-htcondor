@@ -5,15 +5,50 @@ use security:get_htcondor_idtokens
 # we can avoid writing things like *@$(HOSTNAME), which will fail if
 # UID_DOMAIN is set (and introduces more opportunities for DNS to fail).
 ALLOW_WRITE = $(ALLOW_WRITE) *
+SCHEDD_NAME = {{ ansible_host }}
 {% endif %}
 
 SEC_DEFAULT_AUTHENTICATION_METHODS = PASSWORD, IDTOKENS, FS
 SEC_CLIENT_AUTHENTICATION_METHODS = PASSWORD, IDTOKENS, FS
 
-ALLOW_ADMINISTRATOR = $(ALLOW_ADMINISTRATOR) condor_pool@*
-ALLOW_DAEMON = $(ALLOW_DAEMON) condor_pool@*
-ALLOW_NEGOTIATOR = $(ALLOW_NEGOTIATOR) condor_pool@*
+ALLOW_ADMINISTRATOR = $(ALLOW_ADMINISTRATOR) condor_pool@* condor@{{ ansible_domain }}
+ALLOW_DAEMON = $(ALLOW_DAEMON) condor_pool@* condor@{{ ansible_domain }}
+ALLOW_NEGOTIATOR = $(ALLOW_NEGOTIATOR) condor_pool@* condor@{{ ansible_domain }}
 
 
 
 DAEMON_LIST = {{ condor_daemon_list }}
+
+
+{% if condor_host is not string and condor_host|length >1 and "COLLECTOR" in condor_daemon_list -%}
+HAD_USE_SHARED_PORT = TRUE
+HAD_LIST = \
+$(CENTRAL_MANAGER1):$(SHARED_PORT_PORT), \
+$(CENTRAL_MANAGER2):$(SHARED_PORT_PORT)
+
+REPLICATION_USE_SHARED_PORT = TRUE
+REPLICATION_LIST = \
+$(CENTRAL_MANAGER1):$(SHARED_PORT_PORT), \
+$(CENTRAL_MANAGER2):$(SHARED_PORT_PORT)
+
+# The recommended setting.
+HAD_USE_PRIMARY = TRUE
+# If you change which daemon(s) you're making highly-available, you must
+# change both of these values.
+HAD_CONTROLLEE = NEGOTIATOR
+MASTER_NEGOTIATOR_CONTROLLER = HAD
+
+# THE FOLLOWING MAY DIFFER BETWEEN CENTRAL MANAGERS
+# The daemon list may contain additional entries.
+DAEMON_LIST = $(DAEMON_LIST), HAD, REPLICATION
+
+# Using replication is optional.
+HAD_USE_REPLICATION = TRUE
+
+# This is the default location for the state file.
+STATE_FILE = $(SPOOL)/Accountantnew.log
+
+# See note above the length of the negotiation cycle.
+MASTER_HAD_BACKOFF_CONSTANT = 360
+{% endif -%}
+
