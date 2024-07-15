@@ -21,6 +21,7 @@ DAEMON_LIST = {{ condor_daemon_list }}
 
 
 {% if condor_host is not string and condor_host|length >1 and "COLLECTOR" in condor_daemon_list -%}
+TRUST_DOMAIN = {{ ansible_domain }}
 HAD_USE_SHARED_PORT = TRUE
 HAD_LIST = \
 $(CENTRAL_MANAGER1):$(SHARED_PORT_PORT), \
