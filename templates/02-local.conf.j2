@@ -6,7 +6,7 @@ use security:get_htcondor_idtokens
 # UID_DOMAIN is set (and introduces more opportunities for DNS to fail).
 ALLOW_WRITE = $(ALLOW_WRITE) *
 SCHEDD_NAME = {{ ansible_host }}
-QUEUE_SUPER_USERS = root condor condor_pool
+QUEUE_SUPER_USERS = root condor condor_pool condor%
 {% endif %}
 
 SEC_DEFAULT_AUTHENTICATION_METHODS = IDTOKENS, PASSWORD, FS
