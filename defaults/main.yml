@@ -5,6 +5,7 @@ condor_admin: ""         # condor_admin@email.com
 condor_daemon_list: ""   # "MASTER,SCHEDD,STARTD,GANGLIAD"
 condor_domain: "{{ ansible_domain }}"
 condor_host: ""
+trust_domain: ""
 condor_name: ""
 condor_pool_password_file_path: "/etc/condor/passwords.d/POOL"
 condor_pool_password: "hello world"

@@ -17,7 +17,6 @@
   command: "condor_store_cred -f {{ condor_pool_password_file_path }}"
   args:
     stdin: "{{ condor_pool_password }}"
-  notify: regenerate daemon idtoken
   when: 
     - not stat_result.stat.exists or condor_pool_changed.rc != 0
 - name: Check password file's owner and group
@@ -25,18 +24,6 @@
     path: "{{ condor_pool_password_file_path }}"
     owner: root
     group: root
-- name: Check Daemon Token is existed,
-  stat:
-    path: "/etc/condor/tokens.d/condor@{{ ansible_domain }}"
-  register: idtoken_result
-- name: Create Daemon Token if the token is not existed.
-  shell: 
-    cmd: "condor_token_create -identity condor@{{ ansible_domain }} > /etc/condor/tokens.d/condor@{{ ansible_domain }}"
-  when: not idtoken_result.stat.exists
-- name: Change permission for daemon token
-  file: 
-    path: "/etc/condor/tokens.d/condor@{{ ansible_domain }}"
-    mode: "0600"
 - name: 01-cluster.conf for htcondor
   template:
     src: 01-cluster.conf.j2
@@ -53,8 +40,15 @@
     group: condor
     mode: "0644"
   notify: restart condor
-- name: Starting the condor service.
-  service:
-    name: condor
-    state: started
-    enabled: true
+- name: Check Daemon Token is existed,
+  stat:
+    path: "/etc/condor/tokens.d/condor"
+  register: idtoken_result
+- name: Create Daemon Token if the token is not existed.
+  shell: 
+    cmd: "condor_token_create -identity condor@{{ ansible_domain }} > /etc/condor/tokens.d/condor@{{ ansible_domain }}"
+  when: not idtoken_result.stat.exists or idtoken_result.stat.size==0
+- name: Change permission for daemon token
+  file: 
+    path: "/etc/condor/tokens.d/condor@{{ ansible_domain }}"
+    mode: "0600"
