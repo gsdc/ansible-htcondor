@@ -8,6 +8,7 @@ CONDOR_HOST = {{ condor_host | mandatory }}
 {% elif condor_host|length == 1 -%}
 CONDOR_HOST = {{ condor_host[0] | mandatory }}
 {% elif condor_host|length >1 -%}
+TRUST_DOMAIN = {{ ansible_domain }}
 {% for host in condor_host %}
 CENTRAL_MANAGER{{ loop.index }} = {{ host }}
 {% endfor %}
