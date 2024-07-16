@@ -18,6 +18,17 @@ ALLOW_NEGOTIATOR = $(ALLOW_NEGOTIATOR) condor_pool@$(TRUST_DOMAIN) condor@$(TRUS
 
 DAEMON_LIST = {{ condor_daemon_list }}
 
+
+{% if condor_host is string -%}
+TRUST_DOMAIN = {{ condor_host }}
+{% elif condor_host|length == 1 -%}
+TRUST_DOMAIN = {{ condor_host[0] | mandatory }}
+{% elif condor_host|length >1 -%}
+TRUST_DOMAIN = {{ ansible_domain }}
+{% endif %}
+
+
+
 {% if condor_host is not string and condor_host|length >1 and "COLLECTOR" in condor_daemon_list -%}
 HAD_USE_SHARED_PORT = TRUE
 HAD_LIST = \
