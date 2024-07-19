@@ -21,12 +21,30 @@ SEC_PASSWORD_FILE= {{ condor_pool_password_file_path }}
 SEC_TOKEN_POOL_SIGNING_KEY_FILE= $(SEC_PASSWORD_DIRECTORY)/POOL
 
 
+USE_VOMS_ATTRIBUTES = True
+
 {% if enable_dynamicslot %}
 NUM_SLOTS = 1
 NUM_SLOTS_TYPE_1 = 1
 SLOT_TYPE_1 = 100%
 SLOT_TYPE_1_PARTITIONABLE = TRUE
 {% endif %}
+{% if not enable_dynamicslot or enable_wholenode %}
+NUM_SLOTS = 1
+NUM_SLOTS_TYPE_1 = 1
+SLOT_TYPE_1_PARTITIONABLE = false
+SLOT_TYPE_1_START = $(START){% if enable_wholenode %} && (TARGET.WantWholeNode =?= True) {% endif %}{% if pilot_users|length >0 %} &&({% endif %}{% for pilot_user in pilot_users %}(TARGET.Owner =?= "{{ pilot_user}}"){% if not loop.last %} || {% endif %}{% endfor %}{% if pilot_users|length >0 %} ){% endif %}
+{% endif %}
+
+{% if enable_testslot %}
+## Add Test slot for SAM or other test
+NUM_SLOTS = 2
+NUM_SLOTS_TYPE_2 = 1
+SLOT_TYPE_2 = cpus=1, ram=2000, disk=100
+SLOT_TYPE_2_PARTITIONABLE = false
+SLOT_TYPE_2_START = $(START) {% if pilot_users|length >0 %} &&({% endif %} {% for pilot_user in pilot_users %}(TARGET.Owner =!= "{{ pilot_user }}"){% if not loop.last %} && {% endif %}{% endfor %}{% if pilot_users|length >0 %} ){% endif %}
+{% endif %}
+
 
 {% if ((enable_singularity) or (enable_apptainer)): %}
 SINGULARITY_JOB = !isUndefined(TARGET.SingularityImage)
@@ -36,6 +54,9 @@ MOUNT_UNDER_SCRATCH = /tmp, /var/tmp
 SINGULARITY_BIND_EXPR=ifThenElse( isUndefined(TARGET.SingularityBind),"/home",TARGET.SingularityBind)
 SINGULARITY_EXTRA_ARGUMENTS=ifThenElse( isUndefined(TARGET.SingularityExtraArgs),"",TARGET.SingularityExtraArgs)
 {% endif %}
+
+
+
 
 {% if extra != '' %}
 {{ extra }}

@@ -10,9 +10,12 @@ condor_name: ""
 condor_pool_password_file_path: "/etc/condor/passwords.d/POOL"
 condor_pool_password: "hello world"
 install_condor_repo: true
-enable_dynamicslot: false
+enable_dynamicslot: true
 enable_singularity: false
-enable_apptainer: false
+enable_apptainer: true
+enable_wholenode: false
+enable_testslot: false
+test_users: []
 firewall_lowport: 9000
 firewall_highport: 9999
 firewall_whitelist: []
