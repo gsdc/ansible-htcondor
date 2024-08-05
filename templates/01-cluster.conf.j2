@@ -32,7 +32,7 @@ SLOT_TYPE_1_PARTITIONABLE = TRUE
 {% if not enable_dynamicslot or enable_wholenode %}
 NUM_SLOTS = 1
 NUM_SLOTS_TYPE_1 = 1
-SLOT_TYPE_1_PARTITIONABLE = false
+SLOT_TYPE_1_PARTITIONABLE = FALSE
 SLOT_TYPE_1_START = $(START){% if enable_wholenode %} && (TARGET.WantWholeNode =?= True) {% endif %}{% if pilot_users|length >0 %} &&({% endif %}{% for pilot_user in pilot_users %}(TARGET.Owner =?= "{{ pilot_user}}"){% if not loop.last %} || {% endif %}{% endfor %}{% if pilot_users|length >0 %} ){% endif %}
 {% endif %}
 
