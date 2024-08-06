@@ -55,7 +55,7 @@ SINGULARITY_BIND_EXPR=ifThenElse( isUndefined(TARGET.SingularityBind),"/home",TA
 SINGULARITY_EXTRA_ARGUMENTS=ifThenElse( isUndefined(TARGET.SingularityExtraArgs),"",TARGET.SingularityExtraArgs)
 {% endif %}
 
-
+MAX_HISTORY_ROTATIONS=10000
 
 
 {% if extra != '' %}
