@@ -4,3 +4,4 @@
   service:
     name: condor
     state: restarted
+    enabled: true

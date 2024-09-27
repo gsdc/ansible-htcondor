@@ -15,7 +15,7 @@ enable_singularity: false
 enable_apptainer: true
 enable_wholenode: false
 enable_testslot: false
-test_users: []
+pilot_users: []
 firewall_lowport: 9000
 firewall_highport: 9999
 firewall_whitelist: []
