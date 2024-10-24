@@ -43,9 +43,11 @@ NUM_SLOTS = 2
 NUM_SLOTS_TYPE_2 = 1
 SLOT_TYPE_2 = cpus=1, ram=2000, disk=1%
 SLOT_TYPE_2_PARTITIONABLE = false
-SLOT_TYPE_2_START = $(START) {% if enable_wholenode %} && (TARGET.WantWholeNode isnt TRUE) {% endif %}{% if pilot_users|length >0 %} && {% endif %}{% for pilot_user in pilot_users %}(TARGET.Owner isnt "{{ pilot_user }}"){% if not loop.last %} && {% endif %}{% endfor %}
+SLOT_TYPE_2_START = $(START) {% endif %}{% if pilot_users|length >0 %} && {% endif %}{% for pilot_user in pilot_users %}(TARGET.Owner isnt "{{ pilot_user }}"){% if not loop.last %} && {% endif %}{% endfor %}
+
 
 ## SLOT_TYPE_1 need to re-configured.
+
 SLOT_TYPE_1 = cpus=$(DETECTED_CORES), ram=auto, disk=auto
 {% endif %}
 

@@ -9,8 +9,10 @@ SCHEDD_NAME = {{ ansible_host }}
 QUEUE_SUPER_USERS = root condor condor_pool condor%
 {% endif %}
 
+{% if remove_anonymous %}
 SEC_DEFAULT_AUTHENTICATION_METHODS = IDTOKENS, PASSWORD, FS
 SEC_CLIENT_AUTHENTICATION_METHODS  = IDTOKENS, PASSWORD, FS
+{% endif %}
 
 ALLOW_ADMINISTRATOR = $(ALLOW_ADMINISTRATOR) condor_pool@$(TRUST_DOMAIN) condor@$(TRUST_DOMAIN)
 ALLOW_DAEMON = $(ALLOW_DAEMON) condor_pool@$(TRUST_DOMAIN) condor@$(TRUST_DOMAIN)

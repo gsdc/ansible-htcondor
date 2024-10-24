@@ -15,6 +15,7 @@ enable_singularity: false
 enable_apptainer: true
 enable_wholenode: false
 enable_testslot: false
+remove_anonymous: false
 pilot_users: []
 firewall_lowport: 9000
 firewall_highport: 9999
