@@ -1,4 +1,6 @@
 UID_DOMAIN = {{ condor_domain | mandatory }}
+## Somtimes sssd is not working and test user is rejct to test. To prevent this issuse, set SOFT_UID_DOMAIN to True.
+SOFT_UID_DOMAIN = TRUE
 COLLECTOR_NAME = {{ condor_name }}
 FILESYSTEM_DOMAIN = {{ condor_domain }}
 CONDOR_ADMIN = {{ condor_admin }}
