@@ -59,7 +59,7 @@ SINGULARITY_JOB = !isUndefined(TARGET.SingularityImage)
 SINGULARITY_IMAGE_EXPR = TARGET.SingularityImage
 SINGULARITY_TARGET_DIR = /srv
 MOUNT_UNDER_SCRATCH = /tmp, /var/tmp
-SINGULARITY_BIND_EXPR=ifThenElse( isUndefined(TARGET.SingularityBind),"/home",TARGET.SingularityBind)
+SINGULARITY_BIND_EXPR=ifThenElse( isUndefined(TARGET.SingularityBind),"/home,/cvmfs,/etc/grid-security,/var/lib/condor",TARGET.SingularityBind)
 SINGULARITY_EXTRA_ARGUMENTS=ifThenElse( isUndefined(TARGET.SingularityExtraArgs),"",TARGET.SingularityExtraArgs)
 {% endif %}
 
