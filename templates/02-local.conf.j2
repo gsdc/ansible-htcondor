@@ -14,14 +14,27 @@ SEC_DEFAULT_AUTHENTICATION_METHODS = IDTOKENS, PASSWORD, FS
 SEC_CLIENT_AUTHENTICATION_METHODS  = IDTOKENS, PASSWORD, FS
 {% endif %}
 
+{% if trust_domain is defined and trust_domain != "" %}
+TRUST_DOMAIN = {{ trust_domain }}
+{% endif %}
+
 ALLOW_ADMINISTRATOR = $(ALLOW_ADMINISTRATOR) condor_pool@$(TRUST_DOMAIN) condor@$(TRUST_DOMAIN)
 ALLOW_DAEMON = $(ALLOW_DAEMON) condor_pool@$(TRUST_DOMAIN) condor@$(TRUST_DOMAIN)
 ALLOW_NEGOTIATOR = $(ALLOW_NEGOTIATOR) condor_pool@$(TRUST_DOMAIN) condor@$(TRUST_DOMAIN)
 
 DAEMON_LIST = {{ condor_daemon_list }}
 
-{% if trust_domain is defined and trust_domain != "" %}
-TRUST_DOMAIN = {{ trust_domain }}
+{%if dedicate_scheduler is defined and dedicate_scheduler != "" %}
+DedicatedScheduler = "DedicatedScheduler@{{ dedicate_scheduler }}"
+WANT_VACATE    = False
+RANK = Scheduler =?= $(DedicatedScheduler) 
+MPI_CONDOR_RSH_PATH = $(LIBEXEC)
+CONDOR_SSHD = /usr/sbin/sshd
+CONDOR_SSH_KEYGEN = /usr/bin/ssh-keygen
+STARTD_EXPRS = $(STARTD_EXPRS), DedicatedScheduler
+OPENMPI_INSTALL_PATH = /usr
+OPENMPI_EXCLUDE_NETWORK_INTERFACES = docker0,virbr0
+MOUNT_UNDER_SCRATCH = /
 {% endif %}
 
 
