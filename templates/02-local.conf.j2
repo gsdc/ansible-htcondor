@@ -30,8 +30,7 @@ RANK = Scheduler =?= $(DedicatedScheduler)
 MPI_CONDOR_RSH_PATH = $(LIBEXEC)
 CONDOR_SSHD = /usr/sbin/sshd
 CONDOR_SSH_KEYGEN = /usr/bin/ssh-keygen
-STARTD_EXPRS = $(STARTD_EXPRS), DedicatedScheduler
-OPENMPI_INSTALL_PATH = /usr
+STARTD_ATTRS = $(STARTD_ATTRS) DedicatedScheduler
 OPENMPI_EXCLUDE_NETWORK_INTERFACES = docker0,virbr0
 MOUNT_UNDER_SCRATCH = /tmp
 {% endif %}
