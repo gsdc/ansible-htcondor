@@ -26,7 +26,6 @@ DAEMON_LIST = {{ condor_daemon_list }}
 
 {%if dedicate_scheduler is defined and dedicate_scheduler != "" %}
 DedicatedScheduler = "DedicatedScheduler@{{ dedicate_scheduler }}"
-WANT_VACATE    = False
 RANK = Scheduler =?= $(DedicatedScheduler) 
 MPI_CONDOR_RSH_PATH = $(LIBEXEC)
 CONDOR_SSHD = /usr/sbin/sshd
@@ -34,7 +33,7 @@ CONDOR_SSH_KEYGEN = /usr/bin/ssh-keygen
 STARTD_EXPRS = $(STARTD_EXPRS), DedicatedScheduler
 OPENMPI_INSTALL_PATH = /usr
 OPENMPI_EXCLUDE_NETWORK_INTERFACES = docker0,virbr0
-MOUNT_UNDER_SCRATCH = /
+MOUNT_UNDER_SCRATCH = /tmp
 {% endif %}
 
 
