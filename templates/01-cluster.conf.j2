@@ -65,6 +65,8 @@ SINGULARITY_EXTRA_ARGUMENTS=ifThenElse( isUndefined(TARGET.SingularityExtraArgs)
 
 MAX_HISTORY_ROTATIONS=10000
 
+CGROUP_MEMORY_LIMIT_POLICY = {{ condor_cgroup_policy }}
+CGROUP_IGNORE_CACHE_MEMORY = {{ condor_cgroup_ignore_cache }}
 
 {% if extra != '' %}
 {{ extra }}
