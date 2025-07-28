@@ -46,7 +46,7 @@
   register: idtoken_result
 - name: Create Daemon Token if the token is not existed.
   shell: 
-    cmd: "condor_token_create -identity condor@{{ ansible_domain }} > /etc/condor/tokens.d/condor@{{ ansible_domain }}"
+    cmd: "condor_token_create -identity condor@$(condor_config_val TRUST_DOMAIN) > /etc/condor/tokens.d/condor@$(condor_config_val TRUST_DOMAIN)"
   when: not idtoken_result.stat.exists or idtoken_result.stat.size==0
 - name: Change permission for daemon token
   file: 
