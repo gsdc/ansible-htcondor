@@ -18,6 +18,11 @@ SEC_CLIENT_AUTHENTICATION_METHODS  = IDTOKENS, PASSWORD, FS
 TRUST_DOMAIN = {{ trust_domain }}
 {% endif %}
 
+{% if condor_host is not string and condor_host|length >1 %}
+TRUST_DOMAIN = {{ ansible_domain }}
+{% endif %}
+
+
 ALLOW_ADMINISTRATOR = $(ALLOW_ADMINISTRATOR) condor_pool@$(TRUST_DOMAIN) condor@$(TRUST_DOMAIN)
 ALLOW_DAEMON = $(ALLOW_DAEMON) condor_pool@$(TRUST_DOMAIN) condor@$(TRUST_DOMAIN)
 ALLOW_NEGOTIATOR = $(ALLOW_NEGOTIATOR) condor_pool@$(TRUST_DOMAIN) condor@$(TRUST_DOMAIN)
