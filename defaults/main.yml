@@ -1,6 +1,6 @@
 ---
 # defaults file for roles/ansible-htcondor
-condor_version: "23.0"
+condor_version: "25.0"
 condor_admin: ""         # condor_admin@email.com
 condor_daemon_list: ""   # "MASTER,SCHEDD,STARTD,GANGLIAD"
 condor_domain: "{{ ansible_domain }}"
@@ -25,3 +25,10 @@ firewall_highport: 9999
 firewall_whitelist: []
 step: "default"
 extra: ""
+enable_defrag: false
+defrag_option:
+  interval: 3600
+  draining_per_hour: 1.0
+  max_whole_machine: 20
+  max_concurrent_draining: 10
+
