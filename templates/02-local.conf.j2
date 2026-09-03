@@ -40,6 +40,9 @@ OPENMPI_EXCLUDE_NETWORK_INTERFACES = docker0,virbr0
 MOUNT_UNDER_SCRATCH = /tmp
 {% endif %}
 
+{% if "SCHEDD" in condor_daemon_list -%}
+MAX_HISTORY_ROTATIONS=10000
+{% endif %}
 
 {% if condor_host is not string and condor_host|length >1 and "COLLECTOR" in condor_daemon_list -%}
 HAD_USE_SHARED_PORT = TRUE
