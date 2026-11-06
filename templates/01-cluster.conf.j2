@@ -66,6 +66,6 @@ SINGULARITY_EXTRA_ARGUMENTS=ifThenElse( isUndefined(TARGET.SingularityExtraArgs)
 CGROUP_MEMORY_LIMIT_POLICY = {{ condor_cgroup_policy }}
 CGROUP_IGNORE_CACHE_MEMORY = {{ condor_cgroup_ignore_cache }}
 
-{% if extra != '' %}
-{{ extra }}
+{% if condor_common_extra != '' %}
+{{ condor_common_extra }}
 {% endif %}

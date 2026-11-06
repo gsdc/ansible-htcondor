@@ -24,7 +24,12 @@ firewall_lowport: 9000
 firewall_highport: 9999
 firewall_whitelist: []
 step: "default"
-extra: ""
+extra: ""          # 하위 호환용 옛 이름 -> condor_common_extra
+local_extra: ""    # -> condor_local_extra
+# 01-cluster.conf 끝에 붙는 풀 공통 설정
+condor_common_extra: "{{ extra }}"
+# 02-local.conf 끝에 붙는 호스트별 설정 (slot 구성, START 등)
+condor_local_extra: "{{ local_extra }}"
 enable_defrag: false
 defrag_option:
   interval: 3600

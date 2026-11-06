@@ -31,7 +31,8 @@ firewall_lowport: 9000
 firewall_highport: 9999
 firewall_whitelist: []
 step: "default"
-extra: ""
+condor_common_extra: ""   # (옛 이름 extra) 01-cluster.conf 끝에 추가
+condor_local_extra: ""    # (옛 이름 local_extra) 02-local.conf 끝에 추가
 ```
 
 In this role, save the configuration file into the *01-cluster.conf* and *02-local.conf files* in the /etc/condor/config.d/ directory. The cluster.conf file contains configuration files that are common to HTCondor Pool, and the local.conf file contains settings for each machine, such as condor_daemon_list.
@@ -45,6 +46,8 @@ In this role, save the configuration file into the *01-cluster.conf* and *02-loc
 * ```condor_doamin``` : Domain settings to be specified for *FILESYSTEM_DOMAIN*, *UID_DOMAIN* during HTCondor settings.
 * ```condor_host``` : CentralManager's hostname(FQDN)
 * ```step``` : Choose step to run, (default[install+config], install, config)
+* ```condor_common_extra``` : Raw HTCondor config appended to *01-cluster.conf* (pool-wide). Defaults to the legacy ```extra``` variable, so existing ```extra``` settings keep working.
+* ```condor_local_extra``` : Raw HTCondor config appended to *02-local.conf* (per-machine, e.g. slot layout or START). Defaults to ```local_extra```. Since 02-local.conf is read after 01-cluster.conf, values here override the pool-wide ones.
 
 
 Example Playbook

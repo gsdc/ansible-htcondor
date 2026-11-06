@@ -76,3 +76,6 @@ STATE_FILE = $(SPOOL)/Accountantnew.log
 MASTER_HAD_BACKOFF_CONSTANT = 360
 {% endif -%}
 
+{% if condor_local_extra != '' %}
+{{ condor_local_extra }}
+{% endif %}
