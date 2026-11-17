@@ -1,7 +1,15 @@
 ---
 # handlers file for roles/ansible-htcondor
+# systemd 로 부팅된 시스템(/run/systemd/system 존재, sd_booted 와 같은 기준)에서만 재시작한다.
+# 컨테이너 이미지 빌드처럼 systemd 가 PID 1 이 아닌 환경에서는 service 모듈이
+# "Service is in unknown state" 로 실패한다. (service_mgr fact 는 컨테이너에서도 systemd 로 나오고,
+# proc_1_comm fact 는 존재하지 않아 판단에 쓸 수 없다.)
 - name: restart condor
-  service:
-    name: condor
-    state: restarted
-    enabled: true
+  ansible.builtin.shell: |
+    if [ -d /run/systemd/system ]; then
+      systemctl enable condor && systemctl restart condor && echo restarted
+    else
+      echo "systemd 아님: 재시작 건너뜀"
+    fi
+  register: restart_condor
+  changed_when: "'restarted' in restart_condor.stdout"
